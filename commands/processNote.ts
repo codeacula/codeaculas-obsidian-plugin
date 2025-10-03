@@ -30,7 +30,7 @@ export async function processNote(app: any, file: TFile | null): Promise<void> {
 				await app.vault.createFolder(targetDir);
 			}
 
-			// Move the file
+			// Move the file using renameFile which automatically updates backlinks
 			await app.fileManager.renameFile(file, targetPath);
 			new Notice(`Note processed and moved to ${targetPath}`);
 		} else {

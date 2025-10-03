@@ -10,13 +10,14 @@ export function registerCommands(plugin: Plugin): void {
 		name: 'Process note',
 		checkCallback: (checking: boolean) => {
 			const markdownView = plugin.app.workspace.getActiveViewOfType(MarkdownView);
-			if (markdownView) {
-				if (!checking) {
-					processNote(plugin.app, markdownView.file);
-				}
-				return true;
+			if (!markdownView) {
+				return false;
 			}
-			return false;
+			
+			if (!checking) {
+				processNote(plugin.app, markdownView.file);
+			}
+			return true;
 		}
 	});
 }
