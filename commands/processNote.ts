@@ -21,21 +21,22 @@ export async function processNote(app: any, file: TFile | null): Promise<void> {
 		const targetPath = getTargetPath(file.path);
 
 		// Only move if the target path is different from current path
-		if (targetPath !== file.path) {
-			// Ensure the target directory exists
-			const targetDir = targetPath.substring(0, targetPath.lastIndexOf('/'));
-			const folder = app.vault.getAbstractFileByPath(targetDir);
-			
-			if (!folder) {
-				await app.vault.createFolder(targetDir);
-			}
-
-			// Move the file using renameFile which automatically updates backlinks
-			await app.fileManager.renameFile(file, targetPath);
-			new Notice(`Note processed and moved to ${targetPath}`);
-		} else {
+		if (targetPath === file.path) {
 			new Notice('Note processed (already in target location)');
+			return;
 		}
+
+		// Ensure the target directory exists
+		const targetDir = targetPath.substring(0, targetPath.lastIndexOf('/'));
+		const folder = app.vault.getAbstractFileByPath(targetDir);
+		
+		if (!folder) {
+			await app.vault.createFolder(targetDir);
+		}
+
+		// Move the file using renameFile which automatically updates backlinks
+		await app.fileManager.renameFile(file, targetPath);
+		new Notice(`Note processed and moved to ${targetPath}`);
 	} catch (error) {
 		console.error('Error processing note:', error);
 		new Notice(`Failed to process note: ${error.message}`);
