@@ -1,4 +1,4 @@
-import { TFile } from 'obsidian';
+import { App, TFile } from 'obsidian';
 
 /**
  * Updates the frontmatter of a file by adding or updating the 'processed' field
@@ -6,7 +6,7 @@ import { TFile } from 'obsidian';
  */
 export async function updateProcessedFrontmatter(
 	file: TFile,
-	app: any
+	app: App
 ): Promise<void> {
 	await app.fileManager.processFrontMatter(file, (frontmatter: any) => {
 		frontmatter.processed = new Date().toISOString();

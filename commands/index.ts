@@ -7,7 +7,7 @@ import { processNote } from './processNote';
 export function registerCommands(plugin: Plugin): void {
 	plugin.addCommand({
 		id: 'process-note',
-		name: 'Process note',
+		name: 'Process Note',
 		checkCallback: (checking: boolean) => {
 			const markdownView = plugin.app.workspace.getActiveViewOfType(MarkdownView);
 			if (!markdownView) {

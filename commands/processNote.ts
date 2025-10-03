@@ -1,4 +1,4 @@
-import { Notice, TFile } from 'obsidian';
+import { App, Notice, TFile } from 'obsidian';
 import { updateProcessedFrontmatter } from '../utils/frontmatter';
 import { getTargetPath } from '../utils/path';
 
@@ -7,7 +7,7 @@ import { getTargetPath } from '../utils/path';
  * 1. Setting the 'processed' frontmatter to the current datetime
  * 2. Moving the note to a relative folder using the current year and month
  */
-export async function processNote(app: any, file: TFile | null): Promise<void> {
+export async function processNote(app: App, file: TFile | null): Promise<void> {
 	if (!file) {
 		new Notice('No active file to process');
 		return;
