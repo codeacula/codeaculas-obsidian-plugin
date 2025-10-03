@@ -5,10 +5,10 @@ import { App, TFile } from 'obsidian';
  * with the current datetime.
  */
 export async function updateProcessedFrontmatter(
-	file: TFile,
-	app: App
+  file: TFile,
+  app: App
 ): Promise<void> {
-	await app.fileManager.processFrontMatter(file, (frontmatter: any) => {
-		frontmatter.processed = new Date().toISOString();
-	});
+  await app.fileManager.processFrontMatter(file, (frontmatter: any) => {
+    frontmatter.processed = new Date().toISOString();
+  });
 }
