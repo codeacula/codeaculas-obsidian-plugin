@@ -39,6 +39,6 @@ export async function processNote(app: App, file: TFile | null): Promise<void> {
     new Notice(`Note processed and moved to ${targetPath}`);
   } catch (error) {
     console.error('Error processing note:', error);
-    new Notice(`Failed to process note: ${error.message}`);
+    new Notice(`Failed to process note: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
