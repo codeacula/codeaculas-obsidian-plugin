@@ -5,12 +5,10 @@ This is a sample plugin for Obsidian (https://obsidian.md).
 This project uses TypeScript to provide type checking and documentation.
 The repo depends on the latest plugin API (obsidian.d.ts) in TypeScript Definition format, which contains TSDoc comments describing what it does.
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open Sample Modal" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
+This plugin demonstrates some of the basic functionality the plugin API can do.
+- Process notes with automatic frontmatter and file organization
+- AI Personality system with OpenAI and Gemini support
+- AI-powered text generation with customizable personalities
 
 ## First time developing plugins?
 
@@ -88,6 +86,87 @@ If you have multiple URLs, you can also do:
     }
 }
 ```
+
+## AI Personality Feature
+
+This plugin includes an AI Personality system that allows you to create reusable AI personalities with custom prompts and settings.
+
+### Setup
+
+1. Enable network requests in plugin settings (**Settings → Codeacula's Obsidian Plugin → Allow network requests**)
+2. Add your API keys:
+   - **OpenAI API key** for GPT models (e.g., gpt-4, gpt-3.5-turbo)
+   - **Gemini API key** for Google Gemini models (e.g., gemini-1.5-pro)
+
+### Creating an AI Personality Note
+
+Create a new note with the following frontmatter structure:
+
+```yaml
+---
+note-type: ai-personality
+provider: gemini
+model: gemini-1.5-pro
+temperature: 0.7
+maxTokens: 1024
+stream: true
+output:
+  target: insert
+gemini:
+  sensitivity:
+    harassment: medium
+    hate: medium
+    sexual: medium
+    dangerous: medium
+---
+
+You are a helpful writing assistant. Help the user improve their text while maintaining their original voice and intent.
+```
+
+### Frontmatter Schema
+
+- **note-type** (required): Must be `ai-personality`
+- **provider** (required): Either `openai` or `gemini`
+- **model** (required): Model name (e.g., `gpt-4`, `gemini-1.5-pro`)
+- **temperature** (optional): Creativity level, 0.0-1.0, default: 0.7
+- **maxTokens** (optional): Maximum response length, default: 1024
+- **stream** (optional): Enable streaming output, default: true
+- **output.target** (optional): Output location, currently only `insert` supported
+- **gemini.sensitivity** (optional): Gemini-specific content filtering settings
+  - **harassment**: `none`, `low`, `medium`, `high`
+  - **hate**: `none`, `low`, `medium`, `high`
+  - **sexual**: `none`, `low`, `medium`, `high`
+  - **dangerous**: `none`, `low`, `medium`, `high`
+
+### Example: OpenAI Personality
+
+```yaml
+---
+note-type: ai-personality
+provider: openai
+model: gpt-4
+temperature: 0.8
+maxTokens: 2000
+stream: true
+---
+
+You are a creative writer. Help users craft engaging narratives with vivid descriptions and compelling characters.
+```
+
+### Usage
+
+1. **Run AI with Personality…**: Opens a modal to select a personality note. Select text in your current note first.
+2. **Re-run last Personality**: Quickly re-runs the last used personality.
+3. **Use personality referenced by current note**: If your current note has `personality: path/to/persona.md` in its frontmatter, this command will use that personality.
+
+The AI response will be inserted below your cursor (or below your selection) in the active note.
+
+### Privacy and Network Usage
+
+- Network calls are only made when explicitly enabled in settings
+- API keys are stored locally in Obsidian's plugin data
+- No data is sent to AI providers unless you explicitly run an AI command
+- You control what text is sent by selecting it before running a command
 
 ## API Documentation
 

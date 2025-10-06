@@ -157,6 +157,84 @@ Follow Obsidian's **Developer Policies** and **Plugin Guidelines**. In particula
 - Ship features that require cloud services without clear disclosure and explicit opt-in.
 - Store or transmit vault contents unless essential and consented.
 
+## AI Personality System
+
+This plugin implements an AI Personality system that supports OpenAI and Gemini providers.
+
+### AI Personality Note Schema
+
+AI Personality notes are identified by `note-type: ai-personality` in their frontmatter. The complete schema is:
+
+```yaml
+---
+note-type: ai-personality        # Required: Identifies this as an AI personality
+provider: openai | gemini         # Required: AI provider to use
+model: string                     # Required: Model name (e.g., gpt-4, gemini-1.5-pro)
+temperature: number               # Optional: 0.0-1.0, default: 0.7
+maxTokens: number                 # Optional: Max response tokens, default: 1024
+stream: boolean                   # Optional: Enable streaming, default: true
+output:
+  target: insert                  # Optional: Output mode, default: insert
+gemini:                           # Optional: Gemini-specific settings
+  sensitivity:                    # Content filtering thresholds
+    harassment: none|low|medium|high
+    hate: none|low|medium|high
+    sexual: none|low|medium|high
+    dangerous: none|low|medium|high
+---
+
+System prompt or personality instructions go here in the note body.
+```
+
+### Commands
+
+The AI system provides three commands:
+
+1. **Run AI with Personality…** (`run-ai-personality`): Opens a modal to select a personality note
+2. **Re-run last Personality** (`rerun-last-ai-personality`): Re-runs the last used personality
+3. **Use personality referenced by current note** (`use-referenced-personality`): Uses personality from `personality: path/to/note.md` in current note's frontmatter
+
+### Implementation Structure
+
+```
+src/ai/
+  types.ts              # Type definitions and interfaces
+  config.ts             # Frontmatter parsing and validation
+  prompt.ts             # Prompt extraction and message building
+  run.ts                # Main execution logic
+  providers/
+    openai.ts           # OpenAI provider implementation
+    gemini.ts           # Gemini provider with sensitivity settings
+```
+
+### Provider Contract
+
+All providers implement the `AIProvider` interface:
+
+```ts
+interface AIProvider {
+  readonly name: 'openai' | 'gemini';
+  readonly supportsStreaming: boolean;
+  
+  send(
+    messages: AIMessage[],
+    params: AIGenerationParams,
+    apiKey: string
+  ): Promise<string> | AsyncIterable<string>;
+  
+  mapConfig(config: AIConfig): AIGenerationParams;
+}
+```
+
+### Settings
+
+Plugin settings include:
+- `allowNetwork`: Boolean toggle for network requests (default: false)
+- `openaiApiKey`: OpenAI API key
+- `geminiApiKey`: Google Gemini API key
+
+API keys are required only when using the respective provider.
+
 ## Common tasks
 
 ### Organize code across multiple files
