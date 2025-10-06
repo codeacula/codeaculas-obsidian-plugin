@@ -76,6 +76,7 @@ export class GeminiProvider implements AIProvider {
       maxOutputTokens: params.maxTokens,
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const requestBody: any = {
       contents,
       generationConfig,

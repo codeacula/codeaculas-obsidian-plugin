@@ -78,9 +78,6 @@ export async function runAIPersonality(
     // Show loading notice
     new Notice('Processing with AI...');
     
-    // Get cursor position to insert response
-    const cursor = editor.getCursor();
-    
     // Move cursor to end of selection
     const selection = editor.getSelection();
     if (selection) {

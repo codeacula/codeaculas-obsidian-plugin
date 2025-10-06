@@ -1,4 +1,4 @@
-import { AIPersonalityFrontmatter, AIConfig, ProviderName } from './types';
+import { AIConfig, ProviderName } from './types';
 
 /**
  * Default AI configuration values
@@ -16,6 +16,7 @@ const DEFAULT_CONFIG = {
  * @returns Normalized AI configuration
  * @throws Error if frontmatter is invalid
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function parseAIConfig(frontmatter: any): AIConfig {
   // Validate note-type
   if (frontmatter['note-type'] !== 'ai-personality') {
