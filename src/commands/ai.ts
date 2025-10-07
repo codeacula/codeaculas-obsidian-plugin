@@ -64,6 +64,18 @@ export function registerAICommands(plugin: MyPlugin): void {
         return true;
       }
 
+      // Check if there are any AI personality files available
+      const files = plugin.app.vault.getMarkdownFiles();
+      const personalityFiles = files.filter(file => {
+        const cache = plugin.app.metadataCache.getFileCache(file);
+        return cache?.frontmatter?.['note-type'] === 'ai-personality';
+      });
+
+      if (personalityFiles.length === 0) {
+        new Notice('No AI personality files found. Create a note with "note-type: ai-personality" in the frontmatter. See examples/ folder for templates.');
+        return true;
+      }
+
       new AIPersonalitySuggestModal(
         plugin,
         async (file: TFile) => {
